@@ -1,5 +1,12 @@
 
 .global _start  		/* 全局标号 */
+.global _bss_start
+_bss_start:
+	.word __bss_start
+
+.global _bss_end 
+_bss_end: 
+	.word __bss_end
 
 /*
  * 描述：	_start函数，程序从此函数开始执行，此函数主要功能是设置C
@@ -13,12 +20,20 @@ _start:
 	orr r0, r0, #0x13 	/* r0或上0x13,表示使用SVC模式					*/
 	msr cpsr, r0		/* 将r0 的数据写入到cpsr_c中 					*/
 
+/* 清除bss段 */
+	ldr r0, _bss_start
+	ldr r1, _bss_end
+	mov r2, #0
+bss_loop:
+	stmia r0!, {r2}
+	cmp r0, r1
+	ble bss_loop
+
 	/* 设置栈指针，
 	 * 注意：IMX6UL的堆栈是向下增长的！
 	 * 堆栈指针地址一定要是4字节地址对齐的！！！
 	 * DDR范围:0X80000000~0X9FFFFFFF
 	 */
-
 	ldr sp,=0X80200000	/* 设置用户模式下的栈首地址为0X80200000,大小为2MB	  	   			*/
 	b main				/* 跳转到main函数 										*/
 
