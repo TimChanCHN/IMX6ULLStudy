@@ -74,12 +74,12 @@ int main(void)
 		key = get_key_value();
 		if(key == KEY0_VALUE)
 		{
-			rtcdate.year = 2018;
-   			rtcdate.month = 1;
-    		rtcdate.day = 15;
-    		rtcdate.hour = 16;
-    		rtcdate.minute = 23;
-    		rtcdate.second = 0;
+			rtcdate.year = 2020;
+   			rtcdate.month = 5;
+    		rtcdate.day = 14;
+    		rtcdate.hour = 23;
+    		rtcdate.minute = 55;
+    		rtcdate.second = 40;
 			rtc_setdatetime(&rtcdate); /* 初始化时间和日期 */
 			printf("\r\n RTC Init finish\r\n");
 			break;
