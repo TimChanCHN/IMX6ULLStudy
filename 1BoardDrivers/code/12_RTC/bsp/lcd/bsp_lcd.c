@@ -183,7 +183,7 @@ unsigned short lcd_read_panelid(void)
     IOMUXC_SetPinConfig(IOMUXC_LCD_DATA15_GPIO3_IO20, 0xF080);
     IOMUXC_SetPinConfig(IOMUXC_LCD_DATA23_GPIO3_IO28, 0xF080);
 
-    lcd_config.direction =kGPIO_DigitalOutput;
+    lcd_config.direction =kGPIO_DigitalInput;
     gpio_init(GPIO3, 12, &lcd_config);
     gpio_init(GPIO3, 20, &lcd_config);
     gpio_init(GPIO3, 28, &lcd_config);
