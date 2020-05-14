@@ -166,7 +166,7 @@ unsigned short lcd_read_panelid(void)
     /* 打开模拟开关，设置LCD_VSYNC为高电平 */
     gpio_pin_config_t lcd_config;
 
-    IOMUXC_SetPinMux(IOMUXC_LCD_VSYNC_GPIO3_IO03,0);		/* 复用为GPIO1_IO03 */
+    IOMUXC_SetPinMux(IOMUXC_LCD_VSYNC_GPIO3_IO03,0);		/* 复用为GPIO3_IO03 */
     IOMUXC_SetPinConfig(IOMUXC_LCD_VSYNC_GPIO3_IO03, 0X10B0);
 
     /* GPIO初始化 */
@@ -183,7 +183,7 @@ unsigned short lcd_read_panelid(void)
     IOMUXC_SetPinConfig(IOMUXC_LCD_DATA15_GPIO3_IO20, 0xF080);
     IOMUXC_SetPinConfig(IOMUXC_LCD_DATA23_GPIO3_IO28, 0xF080);
 
-    lcd_config.direction =kGPIO_DigitalOutput;
+    lcd_config.direction =kGPIO_DigitalInput;
     gpio_init(GPIO3, 12, &lcd_config);
     gpio_init(GPIO3, 20, &lcd_config);
     gpio_init(GPIO3, 28, &lcd_config);
@@ -198,6 +198,7 @@ unsigned short lcd_read_panelid(void)
     else if( index == 4 ) return ATK4384;
     else if( index == 5 ) return ATK1018;
 
+	printf("index = %d\n\r", index);
     return 0;
 }
 
