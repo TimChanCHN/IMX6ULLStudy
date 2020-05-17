@@ -1,0 +1,82 @@
+CROSS_COMPILE 	?= arm-linux-gnueabihf-
+TARGET		  	?= bsp
+
+CC 				:= $(CROSS_COMPILE)gcc
+LD				:= $(CROSS_COMPILE)ld
+OBJCOPY 		:= $(CROSS_COMPILE)objcopy
+OBJDUMP 		:= $(CROSS_COMPILE)objdump
+
+INCDIRS 		:= imx6ul \
+				   bsp/rtc \
+				   bsp/clk \
+				   bsp/led \
+				   bsp/delay \
+				   bsp/beep \
+				   bsp/gpio \
+				   bsp/key \
+				   bsp/exti \
+				   bsp/int \
+				   bsp/epit_timmer \
+				   bsp/key_filter \
+				   bsp/uart \
+				   bsp/lcd \
+				   bsp/iic \
+				   bsp/ap3216c \
+				   bsp/spi \
+				   bsp/icm20608 \
+				   stdio/include 
+				   			   
+SRCDIRS			:= project \
+				   bsp/rtc \
+				   bsp/clk \
+				   bsp/led \
+				   bsp/delay \
+				   bsp/beep \
+				   bsp/gpio \
+				   bsp/key \
+				   bsp/exti \
+				   bsp/int \
+				   bsp/epit_timmer \
+				   bsp/key_filter \
+				   bsp/uart \
+				   bsp/lcd \
+				   bsp/iic \
+				   bsp/ap3216c \
+				   bsp/spi \
+				   bsp/icm20608 \
+     			   stdio/lib \
+
+				   
+				   
+INCLUDE			:= $(patsubst %, -I %, $(INCDIRS))
+
+SFILES			:= $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.S))
+CFILES			:= $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.c))
+
+SFILENDIR		:= $(notdir  $(SFILES))
+CFILENDIR		:= $(notdir  $(CFILES))
+
+SOBJS			:= $(patsubst %, obj/%, $(SFILENDIR:.S=.o))
+COBJS			:= $(patsubst %, obj/%, $(CFILENDIR:.c=.o))
+OBJS			:= $(SOBJS) $(COBJS)
+
+VPATH			:= $(SRCDIRS)
+LIBPATH			:= -lgcc -L /usr/local/arm/gcc-linaro/lib/gcc/arm-linux-gnueabihf/4.9.4
+
+.PHONY: clean
+	
+$(TARGET).bin : $(OBJS)
+	$(LD) -Timx6ul.lds -o $(TARGET).elf $^ $(LIBPATH)
+	$(OBJCOPY) -O binary -S $(TARGET).elf $@
+	$(OBJDUMP) -D -m arm $(TARGET).elf > $(TARGET).dis
+
+$(SOBJS) : obj/%.o : %.S
+	$(CC) -Wall -nostdlib -fno-builtin -c -O2  $(INCLUDE) -o $@ $<
+
+$(COBJS) : obj/%.o : %.c
+	$(CC) -Wall -march=armv7-a -mfpu=neon-vfpv4 -mfloat-abi=hard -Wa,-mimplicit-it=thumb -nostdlib -fno-builtin -c -O2  $(INCLUDE) -o $@ $<
+	
+clean:
+	rm -rf $(TARGET).elf $(TARGET).dis $(TARGET).bin $(COBJS) $(SOBJS) *.imx
+
+	
