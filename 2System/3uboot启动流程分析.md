@@ -19,7 +19,9 @@
    
 3. lowlevel_init函数
    1. 该函数处于`arch/arm/cpu/armv7/lowlevel_init.S `
-   2. 该函数的作用是设置SP堆栈，此时SP指向的内容依然在片内内存中，后续的操作需要把堆栈重定向到DDR中  
+   2. 作用：
+      1. 初始化时钟、DDR等
+      2. 设置SP堆栈，此时SP指向的内容依然在片内内存中，后续的操作需要把堆栈重定向到DDR中  
     ![lowlevelinit生成的堆栈示意图](https://github.com/TimChanCHN/pictures/raw/master/imx6ul/lowlevel_init.png)
 
 4. s_init函数
@@ -72,6 +74,7 @@
         3.  run_preboot_environment_command ：获取环境变量预启动命令
         4.  bootdelay_process ：读取环境变量 bootdelay 和 bootcmd 的内容，然后将 bootdelay 的值赋值给全局变量 stored_bootdelay
         5.  autoboot_command ：检查倒计时是否结束？倒计时结束之前有没有被打断？如果没有打断，则直接执行`run_command_list`,不然则进入cli_loop，会循环等待处理键盘输入的命令
+        6.  run_command_list:该函数用于处理bootcmd里面保存的启动命令(该函数的第一个参数就是bootcmd命令，由函数bootdelay_process获得),而默认的bootcmd的内容，则由对应的开发板头文件(如：mx6ullevk.h)的宏`CONFIG_BOOTCOMMAND`决定。
 
 11. cli_loop函数
     1.  位置: `common/cli.c`
@@ -135,3 +138,15 @@
 5. 判断有无键盘的输入值打断uboot启动，无则进入启动内核，有则进行扫描键入的命令值
 6. 启动内核
 
+## 5.移植问题
+1. 哪里设置内核运行地址？
+   1. uboot的环境变量：loadaddr
+   
+2. uboot环境变量存储在哪里？
+   1. uboot环境变量存储的位置不能和内核和uboot重合，由宏`CONFIG_ENV_OFFSET`决定
+   2. 正因为uboot的环境变量存储的位置不和uboot.bin/zImage重合，因此每次掉电，环境变量的内容没有发生改变
+   
+3. 为什么自启动的时候，uboot无法加载镜像？
+   1. 如果内核镜像存储于SDRAM中，由于掉电SDRAM的内容会消失，因此uboot无法加载SDRAM中的镜像
+   2. 镜像如果存储于EMMC/SD卡中，当当设备树文件一致，即可以成功加载
+   
