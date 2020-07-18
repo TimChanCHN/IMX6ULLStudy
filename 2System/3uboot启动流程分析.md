@@ -150,3 +150,16 @@
    1. 如果内核镜像存储于SDRAM中，由于掉电SDRAM的内容会消失，因此uboot无法加载SDRAM中的镜像
    2. 镜像如果存储于EMMC/SD卡中，当当设备树文件一致，即可以成功加载
    
+## 6.常用环境变量
+1. bootdelay:启动系统延时
+2. baudrate:串口波特率
+3. bootcmd:引导启动内核环境变量，决定本地EMMC启动内核/从网络启动内核
+   1. 本质都是把内核镜像zImage和.dtb文件复制到loadaddr
+   2. loadaddr一般都是在RAM里面的，因为RAM运行速度快
+4. console=ttymxc0:终端，在串口启动终端
+5. fdt_addr/fdt_file:设备树运行地址以及设备树文件
+6. image:内核镜像
+7. loadaddr:内核启动地址
+8. root:根文件系统存放地址
+   1. mmcroot:本地挂载文件系统存放地址，如/dev/mmcblk1p2 
+   2. nfsroot:网络挂载文件系统存放地址，如192.168.1.18:/home/timchan/linux/nfs/rootfs
