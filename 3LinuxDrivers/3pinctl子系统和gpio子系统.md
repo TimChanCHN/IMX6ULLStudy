@@ -6,7 +6,7 @@
    1. 节点名字前缀必须是pinctrl
    2. 添加属性"fsl,pins"
    3. 属性内容是:`fsl,pins=<MX6UL_PAD_UART1_RTS_B__GPIO1_IO19 0x17059>`
-      1. 宏`MX6UL_PAD_UART1_RTS_B__GPIO1_IO19 = 0x0090 0x031C 0x0000 0x5 0x0`，对于该宏，各个参数的意义是:`<mux_reg conf_reg input_reg mux_mode input_val>`
+      1. 宏`MX6UL_PAD_UART1_RTS_B__GPIO1_IO19 = 0x0090 0x031C 0x0000 0x5 0x0`，对于该宏，各个参数的意义是:`<mux_reg conf_reg input_reg mux_mode input_val>`--该宏可以从`arch/arm/boot/dts/imx6ul-pinfunc.h`中获取
       2. mux_reg:设置复用的寄存器偏移量
       3. conf_reg:设置电气特性寄存器偏移量
       4. input_reg:设置输入寄存器偏移量
