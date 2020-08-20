@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/home/timchan/linux/imx6ull/kernel/atk_linux/include",
+                "/home/timchan/linux/imx6ull/kernel/atk_linux/arch/arm/include",
+                "/home/timchan/linux/imx6ull/kernel/atk_linux/arch/arm/include/generated"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
